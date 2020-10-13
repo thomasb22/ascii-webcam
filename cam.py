@@ -19,14 +19,16 @@ def main():
 			break
 
 def toASCII(frame, cols = 120, rows = 35):
-
 	frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	height, width = frame.shape
 	cell_width = width / cols
 	cell_height = height / rows
+
 	if cols > width or rows > height:
 		raise ValueError('Too many cols or rows.')
+
 	result = ""
+
 	for i in range(rows):
 		for j in range(cols):
 			gray = np.mean(
@@ -34,11 +36,13 @@ def toASCII(frame, cols = 120, rows = 35):
 			)
 			result += grayToChar(gray)
 		result += '\n'
+
 	return result
 
 def grayToChar(gray):
 	CHAR_LIST = ' .:-=+*#%@'
 	num_chars = len(CHAR_LIST)
+
 	return CHAR_LIST[
 		min(
 			int(gray * num_chars / 255),
