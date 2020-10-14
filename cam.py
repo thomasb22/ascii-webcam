@@ -11,11 +11,25 @@ def main():
 
 	while rval:
 		rval, frame = vc.read()
-		print(toASCII(frame))
+		#print(toASCII(frame))
+		blank_image = np.zeros( (900, 1600, 3), np.uint8 )
 
-		key = cv2.waitKey(50) # 50ms pause -> ~20fps
+		font = cv2.FONT_HERSHEY_SIMPLEX
+		fontScale = 1
+		color = (255, 255, 255)
+		thickness = 1
+		y0, dy = 25, 30
+		image = ""
+
+		for i, line in enumerate( toASCII(frame).split('\n') ):
+			y = y0 + i * dy
+			image = cv2.putText(blank_image, line, (50, y ), font, fontScale, color, thickness, cv2.LINE_AA)
+
+		cv2.imshow('ASCII Webcam', image)
+
+		key = cv2.waitKey(1)
 		# Press echap to end
-		if key == 27:
+		if key == 27 or cv2.getWindowProperty('ASCII Webcam', cv2.WND_PROP_VISIBLE) < 1:
 			break
 
 def toASCII(frame, cols = 120, rows = 35):
